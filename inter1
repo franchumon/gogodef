@@ -1,0 +1,9 @@
+// InterfazReserva.java - Bridge Interface
+import java.util.*;
+
+public interface InterfazBrid {
+    void mostrarLista(List<Reserva> lista);
+    void mostrarMensaje(String mensaje);
+    int obtenerSeleccion(Scanner scanner, String hola);
+    String obtenerTexto(Scanner scanner, String merequetenge);
+}
