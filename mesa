@@ -1,0 +1,46 @@
+//prototype
+import java.util.*;
+
+public class Mesa implements Cloneable {
+    private int numeroMesa;
+    private int capacidad;
+    private String fecha;
+    private List<String> horariosDisponibles;
+    
+    public Mesa(int numeroMesa, int capacidad, String fecha, List<String> horarios) {
+        this.numeroMesa = numeroMesa;
+        this.capacidad = capacidad;
+        this.fecha = fecha;
+        this.horariosDisponibles = new ArrayList<>(horarios);
+    }
+    
+    @Override
+    public Mesa clone() {
+        try {
+            Mesa cloned = (Mesa) super.clone();
+            cloned.horariosDisponibles = new ArrayList<>(this.horariosDisponibles);
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Error al clonar mesa", e);
+        }
+    }
+    
+    public boolean reservarHorario(String horario) {
+        if (horariosDisponibles.contains(horario)) {
+            horariosDisponibles.remove(horario);
+            return true;
+        }
+        return false;
+    }
+    
+    public int getNumeroMesa() { return numeroMesa; }
+    public int getCapacidad() { return capacidad; }
+    public String getFecha() { return fecha; }
+    public List<String> getHorariosDisponibles() { return new ArrayList<>(horariosDisponibles); }
+    
+    @Override
+    public String toString() {
+        return "Mesa " + numeroMesa + " (" + capacidad + " personas) - " + fecha + 
+               " - Horarios: " + (horariosDisponibles.isEmpty() ? "Reservada" : horariosDisponibles.toString());
+    }
+}
