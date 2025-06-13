@@ -3,6 +3,8 @@ public class Reserva {
     private String nombreCliente;
     private String emailCliente;
     private String horario;
+
+// recibe la informacion necesaria para crear una reserva
     
     public Reserva(Mesa mesa, String nombreCliente, String emailCliente, String horario) {
         this.mesa = mesa;
@@ -10,11 +12,14 @@ public class Reserva {
         this.emailCliente = emailCliente;
         this.horario = horario;
     }
+// getters para acceder a los datos de reserva
     
     public Mesa getMesa() { return mesa; }
     public String getNombreCliente() { return nombreCliente; }
     public String getEmailCliente() { return emailCliente; }
     public String getHorario() { return horario; }
+
+// aqui muestra los datos de arriba pero en pantalla
     
     @Override
     public String toString() {
