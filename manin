@@ -1,0 +1,143 @@
+
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        GMesas gestor = GMesas.getInstancia(); // SINGLETON
+        
+        // creamos el gestor de reservas con bridge
+        GestorReservas gestorReservas = new GestorReservas(new Interfazbridg2());
+        
+        Mesa mesaSeleccionada = null;
+        String horarioSeleccionado = null;
+        
+        while (true) {
+            System.out.println("\n=== SISTEMA DE RESERVAS DE MESAS PARA RESTAURANTE ===");
+            System.out.println("1. Ver mesas disponibles");
+            System.out.println("2. Seleccionar mesa y horario");
+            System.out.println("3. Confirmar reserva");
+            System.out.println("4. Ver mis reservas");
+            System.out.println("5. Modificar reserva");
+            System.out.println("6. Cancelar Reserva");
+            System.out.println("7. Salir");
+            System.out.print("Seleccione una opcion: ");
+            
+            try {
+                int opcion = Integer.parseInt(scanner.nextLine());
+                
+                switch (opcion) {
+                    case 1:
+                        System.out.println("\nMesas disponibles:");
+                        List<Mesa> mesas = gestor.getMesasDisponibles();
+                        for (int i = 0; i < mesas.size(); i++) {
+                            System.out.println((i+1) + ". " + mesas.get(i));
+                        }
+                        break;
+                        
+                    case 2:
+                        System.out.println("\nselecciona una mesa:");
+                        List<Mesa> mesasDisponibles = gestor.getMesasDisponibles();
+                        for (int i = 0; i < mesasDisponibles.size(); i++) {
+                            System.out.println((i+1) + ". " + mesasDisponibles.get(i));
+                        }
+                        System.out.print("numero de mesa: ");
+                        int seleccion = Integer.parseInt(scanner.nextLine()) - 1;
+                        
+                        if (seleccion >= 0 && seleccion < mesasDisponibles.size()) {
+                            mesaSeleccionada = mesasDisponibles.get(seleccion).clone(); // PROTOTYPE
+                            
+                            System.out.println("\nhorarios disponibles:");
+                            System.out.println(mesaSeleccionada.getHorariosDisponibles());
+                            System.out.print("eliga un horario: ");
+                            horarioSeleccionado = scanner.nextLine();
+                            
+                            if (mesaSeleccionada.reservarHorario(horarioSeleccionado)) {
+                                System.out.println("su seleccion se encuentra reservada temporalmente");
+                            } else {
+                                System.out.println("Horario no disponible");
+                                mesaSeleccionada = null;
+                                horarioSeleccionado = null;
+                            }
+                        } else {
+                            System.out.println("Selección inválida");
+                        }
+                        break;
+                        
+                    case 3:
+                        if (mesaSeleccionada == null) {
+                            System.out.println("No hay mesa seleccionada");
+                            break;
+                        }
+                        
+                        System.out.print("Nombre del cliente: ");
+                        String nombre = scanner.nextLine();
+                        System.out.print("Email: ");
+                        String email = scanner.nextLine();
+                        
+                        Reserva nuevaReserva = new Reserva(mesaSeleccionada, nombre, email, horarioSeleccionado);
+                        
+                        System.out.println("\nconfirme por alguno de estos medios:");
+                        System.out.println("1. Email");
+                        System.out.println("2. SMS");
+                        System.out.print("Opcion: ");
+                        int metodo = Integer.parseInt(scanner.nextLine());
+                        
+                        // adapter noti
+                        Notificacion notificacion = (metodo == 2) ? new AdaptadorSMS() : new AdaptadorEmail();
+                        notificacion.Confirmacion(nuevaReserva);
+                        //para abreviar usamos el ? ya que asi nos ahorramos armar un if y un else
+                        gestor.agregarReserva(nuevaReserva);
+                        
+                        System.out.println("reserva completada");
+                        mesaSeleccionada = null;
+                        horarioSeleccionado = null;
+                        break;
+                        
+                    case 4:
+                        System.out.println("\nMis reservas:");
+                        gestorReservas.mostrarReservas(gestor.getReservas()); // BRIDGE
+                        break;
+                        
+                    case 5:
+                        gestorReservas.modificarReserva(gestor.getReservas(), scanner); // BRIDGE
+                        break;
+
+                    case 6:
+                        List<Reserva> reservas = gestor.getReservas();
+                        if (reservas.isEmpty()) {
+                            System.out.println("\n no tiene reservas para cancelar");
+                            break;
+                        }
+                        
+                        System.out.println("\n eliga la reserva a cancelar:");
+                        for (int i = 0; i < reservas.size(); i++) {
+                            System.out.println((i+1) + ". " + reservas.get(i));
+                        }
+                        System.out.print("numero de reserva: ");
+                        int reservaCancelar = Integer.parseInt(scanner.nextLine()) - 1;
+
+                        if (reservaCancelar >= 0 && reservaCancelar < reservas.size()) {
+                            gestor.cancelarReserva(reservas.get(reservaCancelar));
+                            System.out.println("reserva cancelada");
+                        } else {
+                            System.out.println("Selección inválida");
+                        }
+                        break;
+
+                    case 7:
+                        System.out.println("Gracias por usar nuestro sistema de reservas");
+                        scanner.close();
+                        return;
+
+                    default:
+                        System.out.println("error, intente nuevamente");    
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("ingrese un numero validoi");
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+}
