@@ -1,0 +1,24 @@
+public class Reserva {
+    private Mesa mesa;
+    private String nombreCliente;
+    private String emailCliente;
+    private String horario;
+    
+    public Reserva(Mesa mesa, String nombreCliente, String emailCliente, String horario) {
+        this.mesa = mesa;
+        this.nombreCliente = nombreCliente;
+        this.emailCliente = emailCliente;
+        this.horario = horario;
+    }
+    
+    public Mesa getMesa() { return mesa; }
+    public String getNombreCliente() { return nombreCliente; }
+    public String getEmailCliente() { return emailCliente; }
+    public String getHorario() { return horario; }
+    
+    @Override
+    public String toString() {
+        return "Reserva: " + nombreCliente + " - mesa " + mesa.getNumeroMesa() + 
+               " el " + mesa.getFecha() + " a las " + horario;
+    }
+}
