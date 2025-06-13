@@ -1,0 +1,51 @@
+//singleton
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class GMesas {
+    private static GMesas instancia;
+    private final List<Mesa> mesasDisponibles;
+    private final List<Reserva> reservas;
+    
+    private GMesas() {
+        mesasDisponibles = new ArrayList<>();
+        reservas = new ArrayList<>();
+        
+        // Inicializar con mesas de ejemplo
+        List<String> horarios = Arrays.asList("12:00", "13:00", "14:00", "19:00", "20:00", "21:00");
+        mesasDisponibles.add(new Mesa(1, 2, "Lunes", new ArrayList<>(horarios)));
+
+        mesasDisponibles.add(new Mesa(1, 2, "Martes", new ArrayList<>(horarios)));
+
+        mesasDisponibles.add(new Mesa(3, 6, "Miercoles", new ArrayList<>(horarios)));
+
+        mesasDisponibles.add(new Mesa(4, 2, "Jueves", new ArrayList<>(horarios)));
+        
+        mesasDisponibles.add(new Mesa(5, 4, "Viernes", new ArrayList<>(horarios)));
+    }
+    
+    public static GMesas getInstancia() {
+        if (instancia == null) {
+            instancia = new GMesas();
+        }
+        return instancia;
+    }
+    
+    public List<Mesa> getMesasDisponibles() {
+        return new ArrayList<>(mesasDisponibles);
+    }
+    
+    public void agregarReserva(Reserva reserva) {
+        reservas.add(reserva);
+    }
+    
+    public void cancelarReserva(Reserva reserva) {
+        reservas.remove(reserva);
+    }
+    
+    public List<Reserva> getReservas() {
+        return new ArrayList<>(reservas);
+    }
+}
