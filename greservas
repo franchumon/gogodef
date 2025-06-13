@@ -1,0 +1,48 @@
+// GestorReservas.java - Bridge Abstraction
+import java.util.*;
+
+public class GestorReservas {
+    private InterfazBrid interfaz;
+    
+    public GestorReservas(InterfazBrid interfaz) {
+        this.interfaz = interfaz;
+    }
+    
+    public void mostrarReservas(List<Reserva> reservas) {
+        if (reservas.isEmpty()) {
+            interfaz.mostrarMensaje("No tiene reservas activas");
+        } else {
+            interfaz.mostrarLista(reservas);
+        }
+    }
+    
+    public boolean modificarReserva(List<Reserva> reservas, Scanner scanner) {
+        if (reservas.isEmpty()) {
+            interfaz.mostrarMensaje("No tiene reservas para modificar");
+            return false;
+        }
+        
+        interfaz.mostrarMensaje("Selecciona la reserva modificaras:");
+        interfaz.mostrarLista(reservas);
+        
+        int seleccion = interfaz.obtenerSeleccion(scanner, "Número de reserva: ") - 1;
+        
+        if (seleccion >= 0 && seleccion < reservas.size()) {
+            Reserva reserva = reservas.get(seleccion);
+            interfaz.mostrarMensaje("Horarios disponibles: " + reserva.getMesa().getHorariosDisponibles());
+            
+            String nuevoHorario = interfaz.obtenerTexto(scanner, "Seleccione nuevo horario: ");
+            
+            if (reserva.getMesa().getHorariosDisponibles().contains(nuevoHorario)) {
+                // Aquí normalmente actualizarías la reserva
+                interfaz.mostrarMensaje("Horario modificado con éxito. Nuevo horario: " + nuevoHorario);
+                return true;
+            } else {
+                interfaz.mostrarMensaje("El horario no está disponible.");
+            }
+        } else {
+            interfaz.mostrarMensaje("Selección inválida");
+        }
+        return false;
+    }
+}
