@@ -1,0 +1,13 @@
+public class AdaptadorEmail implements Notificacion {
+    private ServicioEmail servicio;
+    
+    public AdaptadorEmail() {
+        this.servicio = new ServicioEmail();
+    }
+    
+    @Override
+    public void Confirmacion(Reserva reserva) {
+        String mensaje = "se confirmo una reserva bajo el nombre de  " + reserva.getNombreCliente() + " en la mesa " + reserva.getMesa().getNumeroMesa() + " el dia " + reserva.getMesa().getFecha() + " a las " + reserva.getHorario();
+        servicio.enviarEmail(reserva.getEmailCliente(), mensaje);
+    }
+}
