@@ -1,4 +1,3 @@
-//prototype
 import java.util.*;
 
 public class Mesa implements Cloneable {
@@ -6,25 +5,29 @@ public class Mesa implements Cloneable {
     private int capacidad;
     private String fecha;
     private List<String> horariosDisponibles;
-    
+
+    // recibe los datos iniciales y clona la lista de horarios para evitar referencias compartidas
     public Mesa(int numeroMesa, int capacidad, String fecha, List<String> horarios) {
         this.numeroMesa = numeroMesa;
         this.capacidad = capacidad;
         this.fecha = fecha;
         this.horariosDisponibles = new ArrayList<>(horarios);
     }
-    
+
+    // clona una mesa creando una copia independiente 
     @Override
     public Mesa clone() {
         try {
             Mesa cloned = (Mesa) super.clone();
+            // Se hace una copia nueva de la lista para no modificar la original al reservar
             cloned.horariosDisponibles = new ArrayList<>(this.horariosDisponibles);
             return cloned;
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException("Error al clonar mesa", e);
         }
     }
-    
+
+    // Intenta reservar un horario, si existe en la lista, lo remueve y da true si no da false
     public boolean reservarHorario(String horario) {
         if (horariosDisponibles.contains(horario)) {
             horariosDisponibles.remove(horario);
@@ -32,12 +35,16 @@ public class Mesa implements Cloneable {
         }
         return false;
     }
-    
+
+    // Getters para acceder a los datos de la mesa
     public int getNumeroMesa() { return numeroMesa; }
     public int getCapacidad() { return capacidad; }
     public String getFecha() { return fecha; }
+
+    // Se devuelve una copia de la lista de horarios para que no puedan modificar la original desde afuera
     public List<String> getHorariosDisponibles() { return new ArrayList<>(horariosDisponibles); }
-    
+
+    // Devuelve un resumen con la info de la mesa y si tiene o no horarios disponibles
     @Override
     public String toString() {
         return "Mesa " + numeroMesa + " (" + capacidad + " personas) - " + fecha + 
