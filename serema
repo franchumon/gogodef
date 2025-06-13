@@ -1,0 +1,6 @@
+public class ServicioEmail {
+    public void enviarEmail(String email, String mensaje) {
+        System.out.println(" Email enviado a: " + email);
+        System.out.println("   Mensaje: " + mensaje);
+    }
+}
