@@ -1,0 +1,5 @@
+public class ServicioSMS {
+    public void mandarMensaje(String mensaje) { 
+        System.out.println(" SMS enviado: " + mensaje);
+    }
+}
