@@ -1,0 +1,33 @@
+// aqui implementamos bridge
+import java.util.*;
+
+public class Interfazbridg2 implements InterfazBrid {
+    
+    @Override
+    public void mostrarLista(List<Reserva> lista) {
+        for (int i = 0; i < lista.size(); i++) {
+            System.out.println((i + 1) + ". " + lista.get(i));
+        }
+    }
+    
+    @Override
+    public void mostrarMensaje(String mensaje) {
+        System.out.println(mensaje);
+    }
+    
+    @Override
+    public int obtenerSeleccion(Scanner scanner, String prompt) {
+        System.out.print(prompt);
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+    
+    @Override
+    public String obtenerTexto(Scanner scanner, String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine();
+    }
+}
