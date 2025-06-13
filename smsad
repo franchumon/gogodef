@@ -1,0 +1,15 @@
+public class AdaptadorSMS implements Notificacion {
+    private ServicioSMS servicio;
+    
+    public AdaptadorSMS() {
+        this.servicio = new ServicioSMS();
+    }
+    
+    @Override
+    public void Confirmacion(Reserva reserva) {
+        String mensaje = "se confirmo una reserva para la siguiente mesa: " + reserva.getMesa().getNumeroMesa() + " el " + reserva.getMesa().getFecha() + " a las " + reserva.getHorario();
+        servicio.mandarMensaje(mensaje);
+    }
+}
+
+
